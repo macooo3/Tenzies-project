@@ -2,7 +2,9 @@ import { useState } from "react";
 import Die from "./components/Die";
 
 function App() {
-  const generateAllNewDice = function () {
+  const [dice, setDice] = useState(generateAllNewDice());
+
+  function generateAllNewDice() {
     // const tenNumArr = [];
     // for (let i = 0; i < 11; i++) {
     //   const rand = Math.floor(Math.random() * 6 + 1);
@@ -10,16 +12,22 @@ function App() {
     // }
     // return tenNumArr;
     return new Array(10).fill(0).map(() => Math.ceil(Math.random() * 6));
-  };
+  }
 
-  const [tenDie, setTenDie] = useState(generateAllNewDice())
+  function rollDices() {
+    setDice(generateAllNewDice());
+  }
 
+  const diceElements = dice.map((num, index) => (
+    <Die key={index} value={num} />
+  ));
 
   return (
     <main>
       <div className="die-container">
-     {tenDie.map((num, key) => <Die key={key}>{num}</Die>)}
+        {diceElements}
       </div>
+        <button className="roll-button" onClick={rollDices}>Roll</button>
     </main>
   );
 }
