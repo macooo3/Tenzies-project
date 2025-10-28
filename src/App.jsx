@@ -33,8 +33,8 @@ function App() {
       key={dieObj.id}
       value={dieObj.value}
       isHeld={dieObj.isHeld}
-      hold={hold}
-      id={dieObj.id}
+      hold={()=> hold(dieObj.id)}
+     
     />
   ));
 
