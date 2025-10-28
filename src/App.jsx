@@ -13,24 +13,28 @@ function App() {
     // }
     // return tenNumArr;
 
-    return new Array(10)
-      .fill(0)
-      .map(() => ({
-        value: Math.ceil(Math.random() * 6),
-        isHeld: true,
-        id: nanoid(),
-      }));
+    return new Array(10).fill(0).map(() => ({
+      value: Math.ceil(Math.random() * 6),
+      isHeld: false,
+      id: nanoid(),
+    }));
   }
 
   function rollDices() {
     setDice(generateAllNewDice());
   }
 
+  function hold(id) {
+    console.log(id);
+  }
+
   const diceElements = dice.map((dieObj) => (
     <Die
-      isHeld={dieObj.isHeld}
       key={dieObj.id}
       value={dieObj.value}
+      isHeld={dieObj.isHeld}
+      hold={hold}
+      id={dieObj.id}
     />
   ));
 
