@@ -28,7 +28,7 @@ function App() {
 
   const diceElements = dice.map((dieObj) => (
     <Die
-      style={{ backgroundColor: dieObj.isHeld && "#59E391" }}
+      isHeld={dieObj.isHeld}
       key={dieObj.id}
       value={dieObj.value}
     />
