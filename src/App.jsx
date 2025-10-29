@@ -21,11 +21,19 @@ function App() {
   }
 
   function rollDices() {
-    setDice(generateAllNewDice());
+    setDice((prevDice) =>
+      prevDice.map((dice) =>
+        dice.isHeld ? dice : { ...dice, value: Math.ceil(Math.random() * 6) }
+      )
+    );
   }
 
   function hold(id) {
-    console.log(id);
+    setDice((prevDice) =>
+      prevDice.map((dice) =>
+        dice.id === id ? { ...dice, isHeld: !dice.isHeld } : dice
+      )
+    );
   }
 
   const diceElements = dice.map((dieObj) => (
@@ -33,8 +41,7 @@ function App() {
       key={dieObj.id}
       value={dieObj.value}
       isHeld={dieObj.isHeld}
-      hold={()=> hold(dieObj.id)}
-     
+      hold={() => hold(dieObj.id)}
     />
   ));
 
