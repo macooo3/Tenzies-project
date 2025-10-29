@@ -4,6 +4,7 @@ import { nanoid } from "nanoid";
 
 function App() {
   const [dice, setDice] = useState(generateAllNewDice());
+ 
 
   function generateAllNewDice() {
     // const tenNumArr = [];
@@ -19,6 +20,13 @@ function App() {
       id: nanoid(),
     }));
   }
+
+  function tenzies() {
+    if (dice.every(die => die.isHeld && dice[0].value === die.value)){
+      console.log('game won')
+    }
+  }
+  tenzies();
 
   function rollDices() {
     setDice((prevDice) =>
@@ -47,6 +55,11 @@ function App() {
 
   return (
     <main>
+      <h1 className="title">Tenzies Game</h1>
+      <p className="instructions">
+        Roll until all dice are the same number. Click on die to freeze at its
+        current value
+      </p>
       <div className="die-container">{diceElements}</div>
       <button className="roll-button" onClick={rollDices}>
         Roll
