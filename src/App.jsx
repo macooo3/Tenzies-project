@@ -1,25 +1,25 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Die from "./components/Die";
 import { nanoid } from "nanoid";
 import Confetti from "react-confetti";
-import { useWindowSize } from "react-use";
+import { useRaf, useWindowSize } from "react-use";
 
 function App() {
   const [dice, setDice] = useState(() => generateAllNewDice());
   const { width, height } = useWindowSize();
+  const buttonRef = useRef(null);
 
   const gameWon = dice.every(
     (die) => die.isHeld && dice[0].value === die.value
   );
 
-  function generateAllNewDice() {
-    // const tenNumArr = [];
-    // for (let i = 0; i < 11; i++) {
-    //   const rand = Math.floor(Math.random() * 6 + 1);
-    //   tenNumArr.push(rand);
-    // }
-    // return tenNumArr;
+  useEffect(() => {
+    if (gameWon) {
+      buttonRef.current.focus();
+    }
+  }, [gameWon]);
 
+  function generateAllNewDice() {
     return new Array(10).fill(0).map(() => ({
       value: Math.ceil(Math.random() * 6),
       isHeld: false,
@@ -28,11 +28,15 @@ function App() {
   }
 
   function rollDices() {
-    setDice((prevDice) =>
-      prevDice.map((dice) =>
-        dice.isHeld ? dice : { ...dice, value: Math.ceil(Math.random() * 6) }
-      )
-    );
+    gameWon
+      ? setDice(generateAllNewDice())
+      : setDice((prevDice) =>
+          prevDice.map((dice) =>
+            dice.isHeld
+              ? dice
+              : { ...dice, value: Math.ceil(Math.random() * 6) }
+          )
+        );
   }
 
   function hold(id) {
@@ -60,10 +64,13 @@ function App() {
         current value
       </p>
       <div className="die-container">{diceElements}</div>
-      <button className="roll-button" onClick={rollDices}>
+      <button className="roll-button" onClick={rollDices} ref={buttonRef}>
         {gameWon ? "New Game" : "Roll"}
       </button>
       {gameWon && <Confetti width={width} height={height} />}
+      <div aria-live="polite" className="status-message">
+        {gameWon ? "Congratulations! You've won!" : "Keep rolling!"}
+      </div>
     </main>
   );
 }
